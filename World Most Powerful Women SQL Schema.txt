@@ -1,0 +1,75 @@
+-- Table: Individuals (Stores details about influential women)
+CREATE TABLE Individuals (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    country VARCHAR(100),
+    age INT,
+    field VARCHAR(100) -- Politics, Business, Entertainment, etc.
+);
+
+-- Table: Organizations (Stores organizations they are associated with)
+CREATE TABLE Organizations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    industry VARCHAR(100) -- Airlines, Tech, Politics, etc.
+);
+
+-- Table: Roles (Tracks positions held by individuals in organizations)
+CREATE TABLE Roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    individual_id INT,
+    organization_id INT,
+    role_name VARCHAR(255),
+    start_date DATE,
+    end_date DATE DEFAULT NULL, -- NULL means currently active
+    FOREIGN KEY (individual_id) REFERENCES Individuals(id) ON DELETE CASCADE,
+    FOREIGN KEY (organization_id) REFERENCES Organizations(id) ON DELETE CASCADE
+);
+
+-- Table: PowerRankings (Tracks ranking of individuals over the years)
+CREATE TABLE PowerRankings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    individual_id INT,
+    ranking_year INT,
+    rank_position INT,
+    FOREIGN KEY (individual_id) REFERENCES Individuals(id) ON DELETE CASCADE
+);
+
+-- Sample Data
+INSERT INTO Individuals (name, country, age, field) VALUES
+('Netumbo Nandi-Ndaitwah', 'Namibia', 71, 'Politics'),
+('Hana-Rāwhiti Maipi-Clarke', 'New Zealand', 22, 'Politics'),
+('Mitsuko Tottori', 'Japan', 55, 'Business'),
+('Joanna Geraghty', 'USA', 52, 'Business'),
+('Selena Gomez', 'USA', 32, 'Entertainment'),
+('Jay Graber', 'USA', 36, 'Tech'),
+('Rachel Proffitt', 'USA', 45, 'Law'),
+('Marine Le Pen', 'France', 56, 'Politics'),
+('Elise Stefanik', 'USA', 40, 'Politics');
+
+INSERT INTO Organizations (name, industry) VALUES
+('Government of Namibia', 'Politics'),
+('New Zealand Parliament', 'Politics'),
+('Japan Airlines', 'Airlines'),
+('JetBlue Airways', 'Airlines'),
+('Rare Beauty', 'Cosmetics'),
+('Bluesky', 'Technology'),
+('Cooley LLP', 'Law'),
+('National Rally Party', 'Politics'),
+('United Nations', 'International Affairs');
+
+INSERT INTO Roles (individual_id, organization_id, role_name, start_date, end_date) VALUES
+(1, 1, 'President of Namibia', '2025-03-01', NULL),
+(2, 2, 'Member of Parliament', '2023-01-01', NULL),
+(3, 3, 'CEO', '2024-04-01', NULL),
+(4, 4, 'CEO', '2024-02-01', NULL),
+(5, 5, 'Founder & CEO', '2019-01-01', NULL),
+(6, 6, 'CEO', '2024-01-01', NULL),
+(7, 7, 'CEO', '2024-01-15', NULL),
+(8, 8, 'Leader of National Rally', '2011-01-01', NULL),
+(9, 9, 'U.S. Ambassador to UN', '2025-01-20', NULL);
+
+INSERT INTO PowerRankings (individual_id, ranking_year, rank_position) VALUES
+(1, 2025, 10), (2, 2025, 25), (3, 2025, 30),
+(4, 2025, 32), (5, 2025, 5), (6, 2025, 15),
+(7, 2025, 40), (8, 2025, 12), (9, 2025, 20);
